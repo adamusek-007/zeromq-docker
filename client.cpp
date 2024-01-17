@@ -7,12 +7,10 @@ int main()
     zmq::socket_t socket(context, ZMQ_REQ);
     socket.connect("tcp://server:5555");
 
-    // Send a request to the server
     zmq::message_t request(5);
     memcpy(request.data(), "Hello Server - Client there!", 5);
     socket.send(request);
 
-    // Receive the reply from the server
     zmq::message_t reply;
     socket.recv(&reply);
 
