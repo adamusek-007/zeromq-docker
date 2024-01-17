@@ -1,0 +1,7 @@
+services:
+  client:
+    build: ./docker/client
+  server:
+    build: ./docker/server
+    expose:
+      - 5555
