@@ -1,0 +1,4 @@
+Temperatura
+Ciśnienie atmosferyczne
+GPS
+Wilgotność
