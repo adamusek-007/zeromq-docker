@@ -14,10 +14,11 @@ int main()
 
         std::cout << "Received request: " << static_cast<char *>(request.data()) << std::endl;
 
-        zmq::message_t reply(13);
-        memcpy(reply.data(), "Hello, client!", 13);
+        zmq::message_t reply(15);
+        memcpy(reply.data(), "Hello, client!", 15);
         socket.send(reply);
     }
 
     return 0;
 }
+ 

@@ -7,8 +7,8 @@ int main()
     zmq::socket_t socket(context, ZMQ_REQ);
     socket.connect("tcp://server:5555");
 
-    zmq::message_t request(5);
-    memcpy(request.data(), "Hello Server - Client there!", 5);
+    zmq::message_t request(255);
+    memcpy(request.data(), "Hello client there!", 255);
     socket.send(request);
 
     zmq::message_t reply;
