@@ -6,7 +6,7 @@ int main()
 {
     void *context = zmq_ctx_new();
     void *socket = zmq_socket(context, ZMQ_REQ);
-    zmq_connect(socket, "tcp://server:5555");
+    zmq_connect(socket, "tcp://192.168.100.5:5555");
 
     const char *request_data = "Hello client there!";
     zmq_msg_t request;
