@@ -1,5 +1,5 @@
-sudo docker build --tag cpp_server --file Dockerfile.server .
-sudo docker build --tag cpp_client --file Dockerfile.client .
+sudo docker build --tag cpp_server --file ./Dockerfile/Dockerfile.server .
+sudo docker build --tag cpp_client --file ./Dockerfile/Dockerfile.client .
 sudo docker run --name server cpp_server
 sudo docker run --name client --link server:server --rm cpp_client
 
