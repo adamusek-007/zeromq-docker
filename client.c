@@ -1,30 +1,32 @@
 #include <zmq.h>
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
+#include <unistd.h>
 
-int main()
+int main(void)
 {
     void *context = zmq_ctx_new();
-    void *socket = zmq_socket(context, ZMQ_REQ);
-    zmq_connect(socket, "tcp://192.168.100.5:5555");
+    void *requester = zmq_socket(context, ZMQ_REQ);
+    zmq_connect(requester, "tcp://localhost:5555");
 
-    const char *request_data = "Hello client there!";
-    zmq_msg_t request;
-    zmq_msg_init_size(&request, strlen(request_data));
-    memcpy(zmq_msg_data(&request), request_data, strlen(request_data));
-    zmq_msg_send(&request, socket, 0);
-    zmq_msg_close(&request);
+    int request_nbr;
+    for (request_nbr = 0; request_nbr < 10; request_nbr++)
+    {
+        zmq_msg_t request;
+        zmq_msg_init_size(&request, 5);
+        memcpy(zmq_msg_data(&request), "Hello", 5);
+        printf("Sending request %d...\n", request_nbr);
+        zmq_msg_send(&request, requester, 0);
+        zmq_msg_close(&request);
 
-    zmq_msg_t reply;
-    zmq_msg_init(&reply);
-    zmq_msg_recv(&reply, socket, 0);
-
-    printf("Received reply: %s\n", (char *)zmq_msg_data(&reply));
-
-    zmq_msg_close(&reply);
-
-    zmq_close(socket);
+        zmq_msg_t reply;
+        zmq_msg_init(&reply);
+        zmq_msg_recv(&reply, requester, 0);
+        printf("Received reply %d: %s\n", request_nbr, (char *)zmq_msg_data(&reply));
+        zmq_msg_close(&reply);
+        sleep(1);
+    }
+    zmq_close(requester);
     zmq_ctx_destroy(context);
-
     return 0;
 }

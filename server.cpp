@@ -1,34 +1,31 @@
 #include <zmq.hpp>
-#include <iostream>
 #include <string>
+#include <iostream>
+#include <chrono> // Include chrono for time-related functions
+#include <thread> // Include thread for sleep_for function
 
 int main()
 {
-    try
+    // Prepare the context and socket
+    zmq::context_t context(1);
+    zmq::socket_t socket(context, ZMQ_REP);
+    socket.bind("tcp://*:5555");
+
+    while (true)
     {
-        zmq::context_t context(1);
-        zmq::socket_t socket(context, ZMQ_REQ);
-        socket.connect("tcp://192.168.100.5:5555");
+        zmq::message_t request;
 
-        const std::string request_data = "Hello client there!";
-        zmq::message_t request(request_data.size());
-        memcpy(request.data(), request_data.c_str(), request_data.size());
-        socket.send(request, zmq::send_flags::none);
+        // Wait for next request from client
+        socket.recv(&request);
+        std::cout << "Received request: " << std::string(static_cast<char *>(request.data()), request.size()) << std::endl;
 
-        zmq::message_t reply;
-        if (socket.recv(reply, zmq::recv_flags::none))
-        {
-            std::cout << "Received reply: " << std::string(static_cast<char *>(reply.data()), reply.size()) << std::endl;
-        }
-        else
-        {
-            std::cerr << "Error receiving reply." << std::endl;
-        }
+        // Do some "work"
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+
+        // Send reply back to client
+        zmq::message_t reply(5);
+        memcpy(reply.data(), "World", 5);
+        socket.send(reply, zmq::send_flags::none); // Use send_flags::none instead of direct integer value
     }
-    catch (const zmq::error_t &e)
-    {
-        std::cerr << "ZMQ Error: " << e.what() << std::endl;
-    }
-
     return 0;
 }
