@@ -4,11 +4,12 @@
 #include <chrono> // Include chrono for time-related functions
 #include <thread> // Include thread for sleep_for function
 
-int main()
+int main(char[30] host_and_port)
 {
     zmq::context_t context(1);
     zmq::socket_t requester(context, ZMQ_REQ);
-    requester.connect("tcp://192.168.100.5:5555");
+    std::string address = "tcp://" + std::string(host_and_port);
+    requester.connect();
 
     for (int request_nbr = 0; request_nbr < 10; request_nbr++)
     {
