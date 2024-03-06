@@ -1,6 +1,6 @@
-export CROSS_COMPILE=$CC
+export CROSS_COMPILE=$CXX
 
-export ZEROMQ_DIR=/path/to/zeromq
+export ZEROMQ_DIR=./compiled
 
 # Compile your program
-$CC -o your_program your_program.c -I$ZEROMQ_DIR/include -L$ZEROMQ_DIR/lib -lzmq
+$CROSS_COMPILE -o server server.cpp -I$ZEROMQ_DIR/include -L$ZEROMQ_DIR/lib -lzmq
