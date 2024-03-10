@@ -1,2 +1,1 @@
-pyzmq
-time
+pyzmq>=25.1.2
