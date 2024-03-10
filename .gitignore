@@ -1,4 +1,4 @@
 .vscode
-client
-server
+/client/client
+/server/server
 client.zip
